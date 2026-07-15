@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HK Asia Miles Spend Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .cathay-teal { background-color: #006564; }
+        .cathay-text { color: #006564; }
+        .cathay-border { border-color: #006564; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen text-gray-800 font-sans pb-12">
+
+    <!-- Header -->
+    <header class="cathay-teal text-white py-6 shadow-md">
+        <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
+            <div>
+                <h1 id="appTitle" class="text-xl md:text-2xl font-bold tracking-wide"><i class="fa-solid fa-plane-departure mr-2"></i> HK Asia Miles Calculator</h1>
+                <span id="appSub" class="text-xs bg-teal-800 px-3 py-1 rounded-full text-teal-100 inline-block mt-1">HKD Version</span>
+            </div>
+            
+            <!-- Language Toggle Switcher -->
+            <div class="flex bg-teal-800 p-1 rounded-lg border border-teal-700">
+                <button id="langEN" onclick="setLanguage('en')" class="px-3 py-1.5 text-xs font-bold rounded transition-all bg-white text-teal-950 shadow-sm">EN</button>
+                <button id="langZH" onclick="setLanguage('zh')" class="px-3 py-1.5 text-xs font-bold rounded transition-all text-teal-200 hover:text-white">繁</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 mt-8">
+        
+        <!-- App Card -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8 border border-gray-100">
+            <!-- Mode Selector Toggle -->
+            <div class="flex bg-gray-100 rounded-lg p-1 mb-6">
+                <button id="btnMilesToSpend" onclick="setMode('milesToSpend')" class="flex-1 py-3 text-center rounded-md font-semibold text-xs md:text-sm transition-all duration-200 bg-white text-teal-900 shadow-sm">
+                    🎯 Target Miles ➜ Required Spend
+                </button>
+                <button id="btnSpendToMiles" onclick="setMode('spendToMiles')" class="flex-1 py-3 text-center rounded-md font-semibold text-xs md:text-sm transition-all duration-200 text-gray-500 hover:text-gray-800">
+                    💳 Spending ➜ Miles Earned
+                </button>
+            </div>
+
+            <!-- Input Box -->
+            <div class="mb-6">
+                <label id="inputLabel" class="block text-sm font-semibold text-gray-700 mb-2">Enter Target Miles Desired:</label>
+                <div class="relative rounded-md shadow-sm">
+                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                        <span id="inputPrefix" class="text-gray-500 sm:text-sm"><i class="fa-solid fa-star text-yellow-500"></i></span>
+                    </div>
+                    <input type="number" id="calcInput" oninput="calculate()" class="block w-full rounded-md border-gray-300 pl-10 pr-12 py-3 focus:border-teal-500 focus:ring-teal-500 sm:text-sm border text-lg font-bold" placeholder="10000" value="10000">
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                        <span id="inputSuffix" class="text-gray-500 sm:text-sm font-bold">Miles</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Header -->
+        <h2 id="resultsHeader" class="text-lg font-bold text-gray-700 mb-4 px-1"><i class="fa-solid fa-list-ol mr-2"></i> Card Comparison Results</h2>
+
+        <!-- Results Grid -->
+        <div id="resultsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Cards will be dynamically inserted here by JS -->
+        </div>
+
+    </main>
+
+    <script>
+        const i18n = {
+            en: {
+                title: "HK Asia Miles Calculator",
+                sub: "HKD Version",
+                modeMiles: "🎯 Target Miles ➜ Required Spend",
+                modeSpend: "💳 Spending ➜ Miles Earned",
+                labelMiles: "Enter Target Miles Desired:",
+                labelSpend: "Enter Spending Amount (HKD):",
+                miles: "Miles",
+                resultsHeader: "Card Comparison Results",
+                local: "Local",
+                foreign: "Foreign",
+                special: "Special",
+                na: "N/A"
+            },
+            zh: {
+                title: "香港亞洲萬里通消費計算機",
+                sub: "港幣版本",
+                modeMiles: "🎯 目標里數 ➜ 所需消費",
+                modeSpend: "💳 消費金額 ➜ 可賺里數",
+                labelMiles: "請輸入目標里數：",
+                labelSpend: "請輸入消費金額 (港幣)：",
+                miles: "里數",
+                resultsHeader: "信用卡比較結果",
+                local: "本地消費",
+                foreign: "海外消費",
+                special: "特選類別",
+                na: "不適用"
+            }
+        };
+
+        const cardTranslations = {
+            en: {
+                "BOC Cheer Card (Visa Infinite)": "BOC Cheer Card (Visa Infinite)",
+                "HSBC Red Mastercard": "HSBC Red Mastercard",
+                "HSBC Visa Signature": "HSBC Visa Signature",
+                "HSBC EveryMile Card": "HSBC EveryMile Card",
+                "Amex Explorer": "Amex Explorer",
+                "Standard Chartered Cathay Card": "Standard Chartered Cathay Card",
+                "DBS Black World Mastercard": "DBS Black World Mastercard",
+                "Citi PremierMiles": "Citi PremierMiles",
+                "Dining/Travel": "Dining/Travel",
+                "Online Spend": "Online Spend",
+                "Red Hot Rewards": "Red Hot Rewards",
+                "Everyday (Transit/Coffee)": "Everyday (Transit/Coffee)",
+                "Cathay Spend": "Cathay Spend"
+            },
+            zh: {
+                "BOC Cheer Card (Visa Infinite)": "中銀 Cheer Card (Visa Infinite)",
+                "HSBC Red Mastercard": "滙豐 Red Mastercard",
+                "HSBC Visa Signature": "滙豐 Visa Signature",
+                "HSBC EveryMile Card": "滙豐 EveryMile 信用卡",
+                "Amex Explorer": "美國運通 Explorer 信用卡",
+                "Standard Chartered Cathay Card": "渣打國泰萬事達卡",
+                "DBS Black World Mastercard": "星展 Black World Mastercard",
+                "Citi PremierMiles": "花旗 PremierMiles 信用卡",
+                "Dining/Travel": "餐飲 / 旅遊商戶",
+                "Online Spend": "網上消費",
+                "Red Hot Rewards": "最紅自主獎賞",
+                "Everyday (Transit/Coffee)": "指定日常 (交通/咖啡)",
+                "Cathay Spend": "國泰/HK Express"
+            }
+        };
+
+        // Verified Rates (HKD per 1 Mile)
+        const cardData = [
+            { name: "BOC Cheer Card (Visa Infinite)", local: 15, foreign: 1.5, special: 1.5, specialLabel: "Dining/Travel" },
+            { name: "HSBC Red Mastercard", local: 25, foreign: 10, special: 2.5, specialLabel: "Online Spend" },
+            { name: "HSBC Visa Signature", local: 15, foreign: 5.6, special: 2.78, specialLabel: "Red Hot Rewards" },
+            { name: "HSBC EveryMile Card", local: 5, foreign: 5, special: 2, specialLabel: "Everyday (Transit/Coffee)" },
+            { name: "Amex Explorer", local: 5, foreign: 3.33, special: null, specialLabel: "" },
+            { name: "Standard Chartered Cathay Card", local: 6, foreign: 4, special: 2, specialLabel: "Cathay Spend" },
+            { name: "DBS Black World Mastercard", local: 6, foreign: 4, special: null, specialLabel: "" },
+            { name: "Citi PremierMiles", local: 8, foreign: 3, special: null, specialLabel: "" }
+        ];
+
+        let currentLang = 'en';
+        let currentMode = 'milesToSpend';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const langEN = document.getElementById('langEN');
+            const langZH = document.getElementById('langZH');
+            
+            if(lang === 'en') {
+                langEN.className = "px-3 py-1.5 text-xs font-bold rounded transition-all bg-white text-teal-950 shadow-sm";
+                langZH.className = "px-3 py-1.5 text-xs font-bold rounded transition-all text-teal-200 hover:text-white";
+            } else {
+                langZH.className = "px-3 py-1.5 text-xs font-bold rounded transition-all bg-white text-teal-950 shadow-sm";
+                langEN.className = "px-3 py-1.5 text-xs font-bold rounded transition-all text-teal-200 hover:text-white";
+            }
+
+            document.getElementById('appTitle').innerHTML = `<i class="fa-solid fa-plane-departure mr-2"></i> ${i18n[lang].title}`;
+            document.getElementById('appSub').innerText = i18n[lang].sub;
+            document.getElementById('resultsHeader').innerHTML = `<i class="fa-solid fa-list-ol mr-2"></i> ${i18n[lang].resultsHeader}`;
+
+            setMode(currentMode);
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            const btnMilesToSpend = document.getElementById('btnMilesToSpend');
+            const btnSpendToMiles = document.getElementById('btnSpendToMiles');
+            const inputLabel = document.getElementById('inputLabel');
+            const inputPrefix = document.getElementById('inputPrefix');
+            const inputSuffix = document.getElementById('inputSuffix');
+
+            btnMilesToSpend.innerText = i18n[currentLang].modeMiles;
+            btnSpendToMiles.innerText = i18n[currentLang].modeSpend;
+
+            if (mode === 'milesToSpend') {
+                btnMilesToSpend.className = "flex-1 py-3 text-center rounded-md font-semibold text-xs md:text-sm transition-all duration-200 bg-white text-teal-900 shadow-sm";
+                btnSpendToMiles.className = "flex-1 py-3 text-center rounded-md font-semibold text-xs md:text-sm transition-all duration-200 text-gray-500 hover:text-gray-800";
+                inputLabel.innerText = i18n[currentLang].labelMiles;
+                inputPrefix.innerHTML = '<i class="fa-solid fa-star text-yellow-500"></i>';
+                inputSuffix.innerText = i18n[currentLang].miles;
+            } else {
+                btnSpendToMiles.className = "flex-1 py-3 text-center rounded-md font-semibold text-xs md:text-sm transition-all duration-200 bg-white text-teal-900 shadow-sm";
+                btnMilesToSpend.className = "flex-1 py-3 text-center rounded-md font-semibold text-xs md:text-sm transition-all duration-200 text-gray-500 hover:text-gray-800";
+                inputLabel.innerText = i18n[currentLang].labelSpend;
+                inputPrefix.innerHTML = '<span class="font-bold text-teal-700">HK$</span>';
+                inputSuffix.innerText = "HKD";
+            }
+            calculate();
+        }
+
+        function calculate() {
+            const val = parseFloat(document.getElementById('calcInput').value) || 0;
+            const grid = document.getElementById('resultsGrid');
+            grid.innerHTML = '';
+
+            cardData.forEach(card => {
+                let localResult, foreignResult, specialResult;
+
+                if (currentMode === 'milesToSpend') {
+                    localResult = `HK$${(val * card.local).toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+                    foreignResult = `HK$${(val * card.foreign).toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+                    specialResult = card.special ? `HK$${(val * card.special).toLocaleString(undefined, {maximumFractionDigits: 0})}` : i18n[currentLang].na;
+                } else {
+                    localResult = `${(val / card.local).toLocaleString(undefined, {maximumFractionDigits: 0})} ${i18n[currentLang].miles}`;
+                    foreignResult = `${(val / card.foreign).toLocaleString(undefined, {maximumFractionDigits: 0})} ${i18n[currentLang].miles}`;
+                    specialResult = card.special ? `${(val / card.special).toLocaleString(undefined, {maximumFractionDigits: 0})} ${i18n[currentLang].miles}` : i18n[currentLang].na;
+                }
+
+                const cardTranslatedName = cardTranslations[currentLang][card.name] || card.name;
+                const specialLabelText = card.specialLabel ? (cardTranslations[currentLang][card.specialLabel] || card.specialLabel) : i18n[currentLang].special;
+
+                const cardHtml = `
+                    <div class="bg-white rounded-lg shadow border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+                        <div class="cathay-teal text-white p-3 font-semibold text-sm flex justify-between items-center">
+                            <span>${cardTranslatedName}</span>
+                            <i class="fa-regular fa-credit-card"></i>
+                        </div>
+                        <div class="p-4 grid grid-cols-3 gap-2 text-center text-xs">
+                            <div class="bg-gray-50 p-2 rounded">
+                                <p class="text-gray-500 font-medium">${i18n[currentLang].local}</p>
+                                <p class="text-sm font-bold text-gray-800 mt-1">${localResult}</p>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded">
+                                <p class="text-gray-500 font-medium">${i18n[currentLang].foreign}</p>
+                                <p class="text-sm font-bold text-gray-800 mt-1">${foreignResult}</p>
+                            </div>
+                            <div class="bg-teal-50 p-2 rounded flex flex-col justify-between">
+                                <p class="cathay-text font-semibold truncate" title="${specialLabelText}">${specialLabelText}</p>
+                                <p class="text-sm font-bold text-teal-900 mt-1">${specialResult}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHtml;
+            });
+        }
+
+        setLanguage('en');
+    </script>
+</body>
+</html>
