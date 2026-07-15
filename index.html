@@ -34,7 +34,7 @@
     <!-- Main Content Container -->
     <main class="max-w-7xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        <!-- LEFT PANEL: Controls, Wallet & Sorting (4 Cols) -->
+        <!-- LEFT PANEL: Controls, Wallet & Sorting (5 Cols) -->
         <div class="lg:col-span-5 space-y-6">
             
             <!-- Setup Section -->
@@ -72,7 +72,7 @@
                 <p class="text-xs text-slate-400 mb-4" data-key="walletSubtitle">剔選你擁有的卡，或點選進行排序：</p>
                 
                 <!-- Wallet Checkboxes -->
-                <div id="walletCheckboxes" class="space-y-2 mb-6">
+                <div id="walletCheckboxes" class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6">
                     <!-- Loaded dynamically via JS -->
                 </div>
 
@@ -92,7 +92,7 @@
                     <span data-key="cardRankTitle">信用卡里數回報排名</span>
                     <span class="text-xs text-slate-500" data-key="clickCardHint">*點擊卡片鎖定以查詢航點</span>
                 </h3>
-                <div id="cardsContainer" class="space-y-4">
+                <div id="cardsContainer" class="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
                     <!-- Cards will be dynamically inserted here -->
                 </div>
             </div>
@@ -122,7 +122,7 @@
                             單程 One-Way
                         </button>
                         <button onclick="setTripType('roundtrip')" id="tripRound" class="px-4 py-1.5 rounded-md text-xs font-bold transition duration-300 text-slate-400 hover:text-slate-100">
-                            來回來回 Round-Trip
+                            來回 Round-Trip
                         </button>
                     </div>
                 </div>
@@ -140,7 +140,7 @@
                         </div>
                         <div>
                             <p class="text-sm font-semibold text-slate-200" data-key="shareLabel">一鍵分享試算結果</p>
-                            <p class="text-xs text-slate-500" data-key="shareSub">複製里數配對資訊至剪貼簿</p>
+                            <p class="text-xs text-slate-500" data-key="shareSub">複製里數及可換機票資訊發送給好友</p>
                         </div>
                     </div>
                     <button onclick="shareReport()" class="w-full sm:w-auto bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950 font-bold px-5 py-2.5 rounded-xl hover:opacity-90 active:scale-95 transition flex items-center justify-center gap-2">
@@ -150,7 +150,7 @@
 
                 <!-- Reference Note -->
                 <p class="text-[11px] text-slate-500 mt-6 leading-relaxed">
-                    * 數據基於國泰航空 2026 年 5 月 1 日生效之亞洲萬里通 (Asia Miles) 標準飛行獎勵兌換表計算。<br>
+                    * 數據基於國泰航空 2026 年最新標準飛行獎勵兌換表計算。<br>
                     * 所有換領機會以國泰航空之座位實際庫存與最後訂單為準。
                 </p>
             </div>
@@ -214,10 +214,10 @@
         };
 
         let currentLang = 'zh';
-        let tripType = 'oneway'; // 'oneway' or 'roundtrip'
+        let tripType = 'oneway'; 
         let activeCardId = 'everymile';
 
-        // Official May 2026 Standard Flight Award Charts (Cathay Flights)
+        // Official 2026 Standard Flight Award Charts (Cathay Flights)
         const destinations = [
             { 
                 id: "tpe", 
@@ -269,7 +269,7 @@
             }
         ];
 
-        // HK Credit Cards Configuration & Earn Rates (HKD per 1 Mile)
+        // HK Credit Cards Configuration & Earn Rates (All 11 Cards)
         const creditCards = [
             {
                 id: "everymile",
@@ -277,7 +277,7 @@
                 nameEn: "HSBC EveryMile Credit Card",
                 theme: "from-emerald-950 to-emerald-800 border-emerald-600",
                 badgeBg: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
-                rates: { local: 5, online: 2, dining: 2, overseas: 2 } // Designated categories get $2/mile
+                rates: { local: 5, online: 2, dining: 2, overseas: 5 } // $2/mile transit/coffee
             },
             {
                 id: "sc-cathay",
@@ -293,7 +293,7 @@
                 nameEn: "AMEX Explorer Credit Card",
                 theme: "from-slate-900 to-indigo-950 border-indigo-700",
                 badgeBg: "bg-indigo-500/20 text-indigo-300 border-indigo-500/30",
-                rates: { local: 3, online: 3, dining: 3, overseas: 1.68 }
+                rates: { local: 5, online: 5, dining: 5, overseas: 3.33 }
             },
             {
                 id: "hsbc-red",
@@ -301,7 +301,7 @@
                 nameEn: "HSBC Red Credit Card",
                 theme: "from-red-950 to-rose-900 border-red-700",
                 badgeBg: "bg-red-500/20 text-rose-300 border-red-500/30",
-                rates: { local: 25, online: 2.5, dining: 25, overseas: 25 } // Online optimization
+                rates: { local: 25, online: 2.5, dining: 25, overseas: 10 }
             },
             {
                 id: "citi-pm",
@@ -310,6 +310,54 @@
                 theme: "from-sky-950 to-blue-900 border-blue-700",
                 badgeBg: "bg-blue-500/20 text-blue-300 border-blue-500/30",
                 rates: { local: 8, online: 8, dining: 8, overseas: 3 }
+            },
+            {
+                id: "dbs-black",
+                nameZh: "星展 Black World Mastercard",
+                nameEn: "DBS Black World Mastercard",
+                theme: "from-neutral-900 to-zinc-950 border-zinc-700",
+                badgeBg: "bg-zinc-500/20 text-zinc-300 border-zinc-500/30",
+                rates: { local: 6, online: 6, dining: 6, overseas: 4 }
+            },
+            {
+                id: "hsbc-vs",
+                nameZh: "滙豐 Visa Signature 信用卡",
+                nameEn: "HSBC Visa Signature",
+                theme: "from-rose-950 to-pink-900 border-rose-600",
+                badgeBg: "bg-rose-500/20 text-pink-300 border-rose-500/30",
+                rates: { local: 15, online: 2.78, dining: 2.78, overseas: 5.6 } // Assumes Red Hot Category allocated
+            },
+            {
+                id: "hangseng-travel",
+                nameZh: "恒生 Travel+ 信用卡",
+                nameEn: "Hang Seng Travel+ Card",
+                theme: "from-green-950 to-emerald-950 border-green-600",
+                badgeBg: "bg-green-500/20 text-green-300 border-green-500/30",
+                rates: { local: 15, online: 15, dining: 5, overseas: 5 } // 7% overseas rebate is roughly equivalent to $5/mile
+            },
+            {
+                id: "hangseng-mmpower",
+                nameZh: "恒生 MMPOWER 信用卡",
+                nameEn: "Hang Seng MMPOWER Card",
+                theme: "from-cyan-950 to-blue-950 border-cyan-600",
+                badgeBg: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
+                rates: { local: 15, online: 5, dining: 5, overseas: 5 }
+            },
+            {
+                id: "boc-cheer",
+                nameZh: "中銀 Cheers Card (Visa Infinite)",
+                nameEn: "BOC Cheers Card (Visa Infinite)",
+                theme: "from-red-950 to-amber-950 border-amber-600",
+                badgeBg: "bg-amber-500/20 text-amber-300 border-amber-500/30",
+                rates: { local: 15, online: 15, dining: 1.5, overseas: 1.5 } // Unbeatable dining/foreign spending multiplier
+            },
+            {
+                id: "bea-world",
+                nameZh: "東亞 BEA World Mastercard",
+                nameEn: "BEA World Mastercard",
+                theme: "from-yellow-950 to-stone-900 border-yellow-700",
+                badgeBg: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
+                rates: { local: 8, online: 8, dining: 8, overseas: 4 }
             }
         ];
 
@@ -319,7 +367,13 @@
             "sc-cathay": true,
             "amex-explorer": true,
             "hsbc-red": true,
-            "citi-pm": true
+            "citi-pm": true,
+            "dbs-black": true,
+            "hsbc-vs": true,
+            "hangseng-travel": true,
+            "hangseng-mmpower": true,
+            "boc-cheer": true,
+            "bea-world": true
         };
 
         // Initialize App
@@ -336,10 +390,10 @@
             creditCards.forEach(card => {
                 const checked = ownedCards[card.id] ? 'checked' : '';
                 container.innerHTML += `
-                    <label class="flex items-center space-x-3 text-slate-300 hover:text-slate-100 cursor-pointer text-sm">
+                    <label class="flex items-center space-x-2 text-slate-300 hover:text-slate-100 cursor-pointer text-xs">
                         <input type="checkbox" id="chk-${card.id}" ${checked} onchange="toggleWalletCard('${card.id}')" 
                                class="rounded bg-slate-800 border-slate-700 text-teal-500 focus:ring-teal-500">
-                        <span>${currentLang === 'zh' ? card.nameZh : card.nameEn}</span>
+                        <span class="truncate">${currentLang === 'zh' ? card.nameZh : card.nameEn}</span>
                     </label>
                 `;
             });
@@ -449,16 +503,16 @@
                 
                 cardsContainer.innerHTML += `
                     <div onclick="selectActiveCard('${card.id}')" 
-                         class="relative cursor-pointer transition duration-300 transform hover:-translate-y-1 rounded-2xl bg-gradient-to-br ${card.theme} p-5 border shadow-lg flex justify-between items-center ${selectedBorder}">
-                        <div>
-                            <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase border mb-2 ${card.badgeBg}">
+                         class="relative cursor-pointer transition duration-300 transform hover:-translate-y-0.5 rounded-2xl bg-gradient-to-br ${card.theme} p-4 border shadow-lg flex justify-between items-center ${selectedBorder}">
+                        <div class="truncate mr-2">
+                            <span class="inline-block px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider border mb-1.5 ${card.badgeBg}">
                                 HK$${card.rateVal}/Mile
                             </span>
-                            <h4 class="font-bold text-slate-100 text-sm">${cardName}</h4>
+                            <h4 class="font-bold text-slate-100 text-sm truncate">${cardName}</h4>
                         </div>
-                        <div class="text-right">
-                            <p class="text-xs text-slate-400">Earned Miles</p>
-                            <p class="text-2xl font-black text-teal-300 font-mono">${card.miles.toLocaleString()}</p>
+                        <div class="text-right flex-shrink-0">
+                            <p class="text-[10px] text-slate-400">Earned Miles</p>
+                            <p class="text-xl font-black text-teal-300 font-mono">${card.miles.toLocaleString()}</p>
                         </div>
                     </div>
                 `;
@@ -478,8 +532,7 @@
                 const peyReq = dest.miles.pey * mul;
                 const bizReq = dest.miles.biz * mul;
 
-                // Pick the cabin the user is targeting (e.g., economy first, then premium, then business)
-                // We'll calculate progress percentages for each cabin class
+                // Pick the cabin the user is targeting
                 const econPct = Math.min(100, Math.floor((userMiles / econReq) * 100));
                 const peyPct = Math.min(100, Math.floor((userMiles / peyReq) * 100));
                 const bizPct = Math.min(100, Math.floor((userMiles / bizReq) * 100));
