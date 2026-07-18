@@ -12,20 +12,33 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
         body {
             font-family: 'Inter', 'Noto Sans TC', sans-serif;
-            background: #0f172a; /* Sophisticated Dark Theme */
+            background: #0b1a1a; /* Cathay Deep Forest Dark Background */
+        }
+        /* Custom scrollbar matching Cathay accents */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0d2222;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #006564;
+            border-radius: 3px;
         }
     </style>
 </head>
 <body class="text-slate-100 min-h-screen pb-12">
 
     <!-- Top Navigation with Language Selector -->
-    <nav class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <nav class="border-b border-[#143332] bg-[#0d2222]/90 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <span class="text-2xl">✈️</span>
-                <span class="font-bold text-xl tracking-wide bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">Asia Miles Explorer</span>
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl text-[#009b94]">✈️</span>
+                <span class="font-bold text-xl tracking-wide text-white">
+                    Cathay <span class="text-[#009b94]">Miles Explorer</span>
+                </span>
             </div>
-            <button onclick="toggleLanguage()" id="langBtn" class="bg-slate-800 hover:bg-slate-700 text-teal-400 font-medium px-3.5 py-1.5 rounded-full border border-slate-700 text-sm transition duration-300">
+            <button onclick="toggleLanguage()" id="langBtn" class="bg-[#143332] hover:bg-[#1b4443] text-[#00c2ba] font-medium px-4 py-1.5 rounded-full border border-[#1b4443] text-sm transition duration-300">
                 English
             </button>
         </div>
@@ -38,15 +51,15 @@
         <div class="lg:col-span-5 space-y-6">
             
             <!-- Setup Section -->
-            <div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 backdrop-blur">
-                <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-teal-400">
+            <div class="bg-[#0d2222]/60 border border-[#143332] rounded-2xl p-6 backdrop-blur">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-[#00c2ba]">
                     <i class="fa-solid fa-calculator"></i> <span data-key="calcTitle">計算你的消費回報</span>
                 </h2>
                 
                 <!-- Category Dropdown -->
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-slate-400 mb-2" data-key="labelCategory">消費類別</label>
-                    <select id="category" onchange="calculateAll()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-teal-400 transition">
+                    <select id="category" onchange="calculateAll()" class="w-full bg-[#112b2a] border border-[#1b4443] rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-[#00c2ba] transition">
                         <option value="local" data-key="catLocal">本地一般消費 (Local General)</option>
                         <option value="online" data-key="catOnline">網上購物 (Online Shopping)</option>
                         <option value="dining" data-key="catDining">餐飲美饌 (Dining)</option>
@@ -58,15 +71,15 @@
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-slate-400 mb-2" data-key="labelAmount">預計消費金額 (HKD)</label>
                     <div class="relative">
-                        <span class="absolute left-4 top-3 text-slate-500 font-bold">$</span>
-                        <input type="number" id="spendAmount" value="20000" oninput="calculateAll()" class="w-full bg-slate-800 border border-slate-700 rounded-xl pl-8 pr-4 py-3 text-slate-100 font-semibold focus:outline-none focus:border-teal-400 transition" placeholder="e.g. 15000">
+                        <span class="absolute left-4 top-3 text-[#009b94] font-bold">$</span>
+                        <input type="number" id="spendAmount" value="20000" oninput="calculateAll()" class="w-full bg-[#112b2a] border border-[#1b4443] rounded-xl pl-8 pr-4 py-3 text-white font-semibold focus:outline-none focus:border-[#00c2ba] transition" placeholder="e.g. 15000">
                     </div>
                 </div>
             </div>
 
             <!-- "My Wallet" Filter & Sort Cards -->
-            <div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 backdrop-blur">
-                <h2 class="text-lg font-bold mb-3 flex items-center gap-2 text-teal-400">
+            <div class="bg-[#0d2222]/60 border border-[#143332] rounded-2xl p-6 backdrop-blur">
+                <h2 class="text-lg font-bold mb-3 flex items-center gap-2 text-[#00c2ba]">
                     <i class="fa-solid fa-wallet"></i> <span data-key="walletTitle">篩選我的信用卡</span>
                 </h2>
                 <p class="text-xs text-slate-400 mb-4" data-key="walletSubtitle">剔選你擁有的卡，或點選進行排序：</p>
@@ -79,7 +92,7 @@
                 <!-- Sort Options -->
                 <div>
                     <label class="block text-sm font-medium text-slate-400 mb-2" data-key="labelSort">排序方式</label>
-                    <select id="sortBy" onchange="calculateAll()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-300 focus:outline-none focus:border-teal-400 transition">
+                    <select id="sortBy" onchange="calculateAll()" class="w-full bg-[#112b2a] border border-[#1b4443] rounded-xl px-4 py-2.5 text-slate-300 focus:outline-none focus:border-[#00c2ba] transition">
                         <option value="miles-desc" data-key="sortMiles">里數由多到少 (Most Miles)</option>
                         <option value="name-asc" data-key="sortName">信用卡名稱 (Card Name)</option>
                     </select>
@@ -92,7 +105,7 @@
                     <span data-key="cardRankTitle">信用卡里數回報排名</span>
                     <span class="text-xs text-slate-500" data-key="clickCardHint">*點擊卡片鎖定以查詢航點</span>
                 </h3>
-                <div id="cardsContainer" class="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                <div id="cardsContainer" class="space-y-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
                     <!-- Cards will be dynamically inserted here -->
                 </div>
             </div>
@@ -102,26 +115,26 @@
         <!-- RIGHT PANEL: Where Can I Fly & Redemptions (7 Cols) -->
         <div class="lg:col-span-7 space-y-6">
             
-            <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 backdrop-blur min-h-[500px]">
+            <div class="bg-[#0d2222]/40 border border-[#143332] rounded-2xl p-6 backdrop-blur min-h-[500px]">
                 
                 <!-- Top Flight Header -->
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b border-slate-800 pb-5">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b border-[#143332] pb-5">
                     <div>
-                        <h2 class="text-xl font-bold flex items-center gap-2 text-teal-400">
-                            <i class="fa-solid fa-plane-departure"></i> <span data-key="flightTitle">里數飛到邊？ (Where can I fly?)</span>
+                        <h2 class="text-xl font-bold flex items-center gap-2 text-white">
+                            <i class="fa-solid fa-plane-departure text-[#00c2ba]"></i> <span data-key="flightTitle">里數飛到邊？ (Where can I fly?)</span>
                         </h2>
                         <p class="text-sm text-slate-400 mt-1">
                             <span data-key="activeCardLabel">正在查詢信用卡：</span> 
-                            <span id="activeCardName" class="font-bold text-slate-200">--</span>
+                            <span id="activeCardName" class="font-bold text-[#e2d5c3]">--</span> <!-- Earthy Sand Accent Colour -->
                         </p>
                     </div>
 
                     <!-- One-Way vs Round Trip Toggle -->
-                    <div class="bg-slate-800 p-1 rounded-lg flex border border-slate-700">
-                        <button onclick="setTripType('oneway')" id="tripOneway" class="px-4 py-1.5 rounded-md text-xs font-bold transition duration-300 bg-teal-500 text-slate-950">
+                    <div class="bg-[#112b2a] p-1 rounded-lg flex border border-[#1b4443]">
+                        <button onclick="setTripType('oneway')" id="tripOneway" class="px-4 py-1.5 rounded-md text-xs font-bold transition duration-300 bg-[#006564] text-white">
                             單程 One-Way
                         </button>
-                        <button onclick="setTripType('roundtrip')" id="tripRound" class="px-4 py-1.5 rounded-md text-xs font-bold transition duration-300 text-slate-400 hover:text-slate-100">
+                        <button onclick="setTripType('roundtrip')" id="tripRound" class="px-4 py-1.5 rounded-md text-xs font-bold transition duration-300 text-slate-400 hover:text-white">
                             來回 Round-Trip
                         </button>
                     </div>
@@ -133,17 +146,17 @@
                 </div>
 
                 <!-- One-Click Share Widget -->
-                <div class="mt-8 p-4 bg-slate-800/40 rounded-xl border border-slate-700/50 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="mt-8 p-5 bg-[#112b2a]/50 rounded-xl border border-[#1b4443] flex flex-col sm:flex-row justify-between items-center gap-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-teal-500/10 flex items-center justify-center text-teal-400 text-lg">
+                        <div class="w-10 h-10 rounded-full bg-[#006564]/20 flex items-center justify-center text-[#00c2ba] text-lg">
                             <i class="fa-solid fa-share-nodes"></i>
                         </div>
                         <div>
-                            <p class="text-sm font-semibold text-slate-200" data-key="shareLabel">一鍵分享試算結果</p>
-                            <p class="text-xs text-slate-500" data-key="shareSub">複製里數及可換機票資訊發送給好友</p>
+                            <p class="text-sm font-semibold text-white" data-key="shareLabel">一鍵分享試算結果</p>
+                            <p class="text-xs text-slate-400" data-key="shareSub">複製里數及可換機票資訊發送給好友</p>
                         </div>
                     </div>
-                    <button onclick="shareReport()" class="w-full sm:w-auto bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950 font-bold px-5 py-2.5 rounded-xl hover:opacity-90 active:scale-95 transition flex items-center justify-center gap-2">
+                    <button onclick="shareReport()" class="w-full sm:w-auto bg-[#006564] hover:bg-[#007b7a] border border-[#009b94] text-white font-bold px-6 py-3 rounded-xl hover:opacity-90 active:scale-95 transition flex items-center justify-center gap-2 shadow-md">
                         <i class="fa-solid fa-copy"></i> <span data-key="shareBtn">複製報告 Copy Report</span>
                     </button>
                 </div>
@@ -217,7 +230,7 @@
         let tripType = 'oneway'; 
         let activeCardId = 'everymile';
 
-        // Official 2026 Standard Flight Award Charts (Cathay Flights)
+        // Official Standard Flight Award Charts (Cathay Flights)
         const destinations = [
             { 
                 id: "tpe", 
@@ -270,119 +283,109 @@
         ];
 
         // HK Credit Cards Configuration & Earn Rates (All 11 Cards)
+        // Redesigned with Cathay clean card theme styles
         const creditCards = [
             {
                 id: "everymile",
                 nameZh: "滙豐 EveryMile 信用卡",
                 nameEn: "HSBC EveryMile Credit Card",
-                theme: "from-emerald-950 to-emerald-800 border-emerald-600",
-                badgeBg: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
-                rates: { local: 5, online: 2, dining: 2, overseas: 5 } // $2/mile transit/coffee
+                theme: "from-[#112d2a] to-[#0a1e1d] border-[#1c4d4a]",
+                badgeBg: "bg-[#006564]/30 text-[#00c2ba] border-[#006564]/50",
+                rates: { local: 5, online: 2, dining: 2, overseas: 5 }
             },
             {
                 id: "sc-cathay",
                 nameZh: "渣打國泰 Mastercard",
                 nameEn: "SCB Cathay Mastercard",
-                theme: "from-teal-950 to-cyan-900 border-teal-600",
-                badgeBg: "bg-teal-500/20 text-teal-300 border-teal-500/30",
+                theme: "from-[#163a37] to-[#0b2120] border-[#009b94]",
+                badgeBg: "bg-[#00c2ba]/20 text-white border-[#009b94]/40",
                 rates: { local: 6, online: 4, dining: 4, overseas: 4 }
             },
             {
                 id: "amex-explorer",
                 nameZh: "美國運通 Explorer 信用卡",
                 nameEn: "AMEX Explorer Credit Card",
-                theme: "from-slate-900 to-indigo-950 border-indigo-700",
-                badgeBg: "bg-indigo-500/20 text-indigo-300 border-indigo-500/30",
+                theme: "from-[#112d2a] to-[#0a1e1d] border-[#1c4d4a]",
+                badgeBg: "bg-[#006564]/30 text-[#00c2ba] border-[#006564]/50",
                 rates: { local: 5, online: 5, dining: 5, overseas: 3.33 }
             },
             {
                 id: "hsbc-red",
                 nameZh: "滙豐 Red 信用卡",
                 nameEn: "HSBC Red Credit Card",
-                theme: "from-red-950 to-rose-900 border-red-700",
-                badgeBg: "bg-red-500/20 text-rose-300 border-red-500/30",
+                theme: "from-[#112d2a] to-[#0a1e1d] border-[#1c4d4a]",
+                badgeBg: "bg-[#006564]/30 text-[#00c2ba] border-[#006564]/50",
                 rates: { local: 25, online: 2.5, dining: 25, overseas: 10 }
             },
             {
                 id: "citi-pm",
                 nameZh: "花旗 PremierMiles 信用卡",
                 nameEn: "Citi PremierMiles Card",
-                theme: "from-sky-950 to-blue-900 border-blue-700",
-                badgeBg: "bg-blue-500/20 text-blue-300 border-blue-500/30",
+                theme: "from-[#112d2a] to-[#0a1e1d] border-[#1c4d4a]",
+                badgeBg: "bg-[#006564]/30 text-[#00c2ba] border-[#006564]/50",
                 rates: { local: 8, online: 8, dining: 8, overseas: 3 }
             },
             {
                 id: "dbs-black",
                 nameZh: "星展 Black World Mastercard",
                 nameEn: "DBS Black World Mastercard",
-                theme: "from-neutral-900 to-zinc-950 border-zinc-700",
-                badgeBg: "bg-zinc-500/20 text-zinc-300 border-zinc-500/30",
+                theme: "from-[#112d2a] to-[#0a1e1d] border-[#1c4d4a]",
+                badgeBg: "bg-[#006564]/30 text-[#00c2ba] border-[#006564]/50",
                 rates: { local: 6, online: 6, dining: 6, overseas: 4 }
             },
             {
                 id: "hsbc-vs",
                 nameZh: "滙豐 Visa Signature 信用卡",
                 nameEn: "HSBC Visa Signature",
-                theme: "from-rose-950 to-pink-900 border-rose-600",
-                badgeBg: "bg-rose-500/20 text-pink-300 border-rose-500/30",
-                rates: { local: 15, online: 2.78, dining: 2.78, overseas: 5.6 } // Assumes Red Hot Category allocated
+                theme: "from-[#112d2a] to-[#0a1e1d] border-[#1c4d4a]",
+                badgeBg: "bg-[#006564]/30 text-[#00c2ba] border-[#006564]/50",
+                rates: { local: 15, online: 2.78, dining: 2.78, overseas: 5.6 }
             },
             {
                 id: "hangseng-travel",
                 nameZh: "恒生 Travel+ 信用卡",
                 nameEn: "Hang Seng Travel+ Card",
-                theme: "from-green-950 to-emerald-950 border-green-600",
-                badgeBg: "bg-green-500/20 text-green-300 border-green-500/30",
-                rates: { local: 15, online: 15, dining: 5, overseas: 5 } // 7% overseas rebate is roughly equivalent to $5/mile
+                theme: "from-[#112d2a] to-[#0a1e1d] border-[#1c4d4a]",
+                badgeBg: "bg-[#006564]/30 text-[#00c2ba] border-[#006564]/50",
+                rates: { local: 15, online: 15, dining: 5, overseas: 5 }
             },
             {
                 id: "hangseng-mmpower",
                 nameZh: "恒生 MMPOWER 信用卡",
                 nameEn: "Hang Seng MMPOWER Card",
-                theme: "from-cyan-950 to-blue-950 border-cyan-600",
-                badgeBg: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
+                theme: "from-[#112d2a] to-[#0a1e1d] border-[#1c4d4a]",
+                badgeBg: "bg-[#006564]/30 text-[#00c2ba] border-[#006564]/50",
                 rates: { local: 15, online: 5, dining: 5, overseas: 5 }
             },
             {
                 id: "boc-cheer",
                 nameZh: "中銀 Cheers Card (Visa Infinite)",
                 nameEn: "BOC Cheers Card (Visa Infinite)",
-                theme: "from-red-950 to-amber-950 border-amber-600",
-                badgeBg: "bg-amber-500/20 text-amber-300 border-amber-500/30",
-                rates: { local: 15, online: 15, dining: 1.5, overseas: 1.5 } // Unbeatable dining/foreign spending multiplier
+                theme: "from-[#112d2a] to-[#0a1e1d] border-[#1c4d4a]",
+                badgeBg: "bg-[#006564]/30 text-[#00c2ba] border-[#006564]/50",
+                rates: { local: 15, online: 15, dining: 1.5, overseas: 1.5 }
             },
             {
                 id: "bea-world",
                 nameZh: "東亞 BEA World Mastercard",
                 nameEn: "BEA World Mastercard",
-                theme: "from-yellow-950 to-stone-900 border-yellow-700",
-                badgeBg: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
+                theme: "from-[#112d2a] to-[#0a1e1d] border-[#1c4d4a]",
+                badgeBg: "bg-[#006564]/30 text-[#00c2ba] border-[#006564]/50",
                 rates: { local: 8, online: 8, dining: 8, overseas: 4 }
             }
         ];
 
-        // Track owned cards in Wallet (defaults to true for all initially)
         let ownedCards = {
-            "everymile": true,
-            "sc-cathay": true,
-            "amex-explorer": true,
-            "hsbc-red": true,
-            "citi-pm": true,
-            "dbs-black": true,
-            "hsbc-vs": true,
-            "hangseng-travel": true,
-            "hangseng-mmpower": true,
-            "boc-cheer": true,
-            "bea-world": true
+            "everymile": true, "sc-cathay": true, "amex-explorer": true, "hsbc-red": true,
+            "citi-pm": true, "dbs-black": true, "hsbc-vs": true, "hangseng-travel": true,
+            "hangseng-mmpower": true, "boc-cheer": true, "bea-world": true
         };
 
-        // Initialize App
         window.onload = function() {
             buildWalletCheckboxes();
             calculateAll();
         };
 
-        // Render Wallet Filters dynamically
         function buildWalletCheckboxes() {
             const container = document.getElementById('walletCheckboxes');
             container.innerHTML = '';
@@ -390,20 +393,17 @@
             creditCards.forEach(card => {
                 const checked = ownedCards[card.id] ? 'checked' : '';
                 container.innerHTML += `
-                    <label class="flex items-center space-x-2 text-slate-300 hover:text-slate-100 cursor-pointer text-xs">
+                    <label class="flex items-center space-x-2 text-slate-300 hover:text-white cursor-pointer text-xs">
                         <input type="checkbox" id="chk-${card.id}" ${checked} onchange="toggleWalletCard('${card.id}')" 
-                               class="rounded bg-slate-800 border-slate-700 text-teal-500 focus:ring-teal-500">
+                               class="rounded bg-[#112b2a] border-[#1b4443] text-[#00c2ba] focus:ring-[#00c2ba]">
                         <span class="truncate">${currentLang === 'zh' ? card.nameZh : card.nameEn}</span>
                     </label>
                 `;
             });
         }
 
-        // Toggle wallet visibility
         function toggleWalletCard(id) {
             ownedCards[id] = document.getElementById(`chk-${id}`).checked;
-            
-            // If active locked card is unchecked, set it to the first available owned card
             if (!ownedCards[activeCardId]) {
                 const firstOwned = Object.keys(ownedCards).find(k => ownedCards[k]);
                 activeCardId = firstOwned || 'everymile';
@@ -411,12 +411,10 @@
             calculateAll();
         }
 
-        // Language Switcher
         function toggleLanguage() {
             currentLang = currentLang === 'zh' ? 'en' : 'zh';
             document.getElementById('langBtn').innerText = currentLang === 'zh' ? 'English' : '繁體中文';
             
-            // Translate UI Strings
             document.querySelectorAll('[data-key]').forEach(el => {
                 const key = el.getAttribute('data-key');
                 if (i18n[currentLang][key]) {
@@ -428,43 +426,34 @@
             calculateAll();
         }
 
-        // Trip Type Toggle (One-Way vs Round Trip)
         function setTripType(type) {
             tripType = type;
             const btnOne = document.getElementById('tripOneway');
             const btnRound = document.getElementById('tripRound');
 
             if (type === 'oneway') {
-                btnOne.className = "px-4 py-1.5 rounded-md text-xs font-bold transition duration-300 bg-teal-500 text-slate-950";
-                btnRound.className = "px-4 py-1.5 rounded-md text-xs font-bold transition duration-300 text-slate-400 hover:text-slate-100";
+                btnOne.className = "px-4 py-1.5 rounded-md text-xs font-bold transition duration-300 bg-[#006564] text-white";
+                btnRound.className = "px-4 py-1.5 rounded-md text-xs font-bold transition duration-300 text-slate-400 hover:text-white";
             } else {
-                btnRound.className = "px-4 py-1.5 rounded-md text-xs font-bold transition duration-300 bg-teal-500 text-slate-950";
-                btnOne.className = "px-4 py-1.5 rounded-md text-xs font-bold transition duration-300 text-slate-400 hover:text-slate-100";
+                btnRound.className = "px-4 py-1.5 rounded-md text-xs font-bold transition duration-300 bg-[#006564] text-white";
+                btnOne.className = "px-4 py-1.5 rounded-md text-xs font-bold transition duration-300 text-slate-400 hover:text-white";
             }
             calculateAll();
         }
 
-        // Core Calculation & UI Render Function
         function calculateAll() {
             const amount = parseFloat(document.getElementById('spendAmount').value) || 0;
             const cat = document.getElementById('category').value;
             const sortBy = document.getElementById('sortBy').value;
             
-            // 1. Calculate and build card data objects
             let processedCards = creditCards.map(card => {
                 const rate = card.rates[cat];
                 const miles = Math.floor(amount / rate);
-                return {
-                    ...card,
-                    miles: miles,
-                    rateVal: rate
-                };
+                return { ...card, miles: miles, rateVal: rate };
             });
 
-            // 2. Filter out non-owned cards
             processedCards = processedCards.filter(card => ownedCards[card.id]);
 
-            // 3. Sort Cards
             if (sortBy === 'miles-desc') {
                 processedCards.sort((a, b) => b.miles - a.miles);
             } else if (sortBy === 'name-asc') {
@@ -475,22 +464,16 @@
                 });
             }
 
-            // 4. Render Card Results List
             const cardsContainer = document.getElementById('cardsContainer');
             cardsContainer.innerHTML = '';
 
             if (processedCards.length === 0) {
-                cardsContainer.innerHTML = `
-                    <div class="text-center py-6 text-slate-500 text-sm">
-                        請勾選至少一張信用卡以顯示結果
-                    </div>
-                `;
+                cardsContainer.innerHTML = `<div class="text-center py-6 text-slate-500 text-sm">請勾選至少一張信用卡以顯示結果</div>`;
                 document.getElementById('activeCardName').innerText = "--";
                 document.getElementById('flightGrid').innerHTML = '';
                 return;
             }
 
-            // Make sure the active compared card is valid & exists in the filtered results
             let activeCard = processedCards.find(c => c.id === activeCardId) || processedCards[0];
             activeCardId = activeCard.id;
             
@@ -499,81 +482,71 @@
             processedCards.forEach(card => {
                 const isSelected = card.id === activeCardId;
                 const cardName = currentLang === 'zh' ? card.nameZh : card.nameEn;
-                const selectedBorder = isSelected ? 'ring-2 ring-teal-400 ring-offset-2 ring-offset-slate-900' : '';
+                // Cathay Sand styling for active focus, clean border for unselected
+                const selectedBorder = isSelected ? 'ring-2 ring-[#e2d5c3] border-[#009b94]' : 'hover:border-[#1c4d4a]';
                 
                 cardsContainer.innerHTML += `
                     <div onclick="selectActiveCard('${card.id}')" 
-                         class="relative cursor-pointer transition duration-300 transform hover:-translate-y-0.5 rounded-2xl bg-gradient-to-br ${card.theme} p-4 border shadow-lg flex justify-between items-center ${selectedBorder}">
+                         class="relative cursor-pointer transition duration-200 rounded-xl bg-gradient-to-br ${card.theme} p-4 border flex justify-between items-center ${selectedBorder}">
                         <div class="truncate mr-2">
-                            <span class="inline-block px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider border mb-1.5 ${card.badgeBg}">
+                            <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider border mb-1.5 ${card.badgeBg}">
                                 HK$${card.rateVal}/Mile
                             </span>
-                            <h4 class="font-bold text-slate-100 text-sm truncate">${cardName}</h4>
+                            <h4 class="font-bold text-white text-sm truncate">${cardName}</h4>
                         </div>
                         <div class="text-right flex-shrink-0">
                             <p class="text-[10px] text-slate-400">Earned Miles</p>
-                            <p class="text-xl font-black text-teal-300 font-mono">${card.miles.toLocaleString()}</p>
+                            <p class="text-xl font-black text-[#00c2ba] font-mono">${card.miles.toLocaleString()}</p>
                         </div>
                     </div>
                 `;
             });
 
-            // 5. Render "Where Can I Fly" Destinations based on Active Card Miles
             const userMiles = activeCard.miles;
             const flightGrid = document.getElementById('flightGrid');
             flightGrid.innerHTML = '';
 
             destinations.forEach(dest => {
                 const title = currentLang === 'zh' ? dest.cityZh : dest.cityEn;
-                
-                // Adjust requirements based on One-way / Round-trip
                 const mul = tripType === 'roundtrip' ? 2 : 1;
                 const econReq = dest.miles.econ * mul;
                 const peyReq = dest.miles.pey * mul;
                 const bizReq = dest.miles.biz * mul;
 
-                // Pick the cabin the user is targeting
                 const econPct = Math.min(100, Math.floor((userMiles / econReq) * 100));
                 const peyPct = Math.min(100, Math.floor((userMiles / peyReq) * 100));
                 const bizPct = Math.min(100, Math.floor((userMiles / bizReq) * 100));
 
                 flightGrid.innerHTML += `
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-slate-700 transition">
+                    <div class="bg-[#0d2222]/80 border border-[#143332] rounded-xl p-5 space-y-4 hover:border-[#1b4443] transition">
                         <div class="flex items-center gap-3">
-                            <span class="text-3xl">${dest.img}</span>
+                            <span class="text-2xl">${dest.img}</span>
                             <div>
-                                <h4 class="font-bold text-slate-100 text-sm md:text-base">${title}</h4>
-                                <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full border border-slate-700 font-medium">
+                                <h4 class="font-bold text-white text-sm md:text-base">${title}</h4>
+                                <span class="text-[10px] bg-[#112b2a] text-slate-400 px-2 py-0.5 rounded-full border border-[#1b4443] font-medium">
                                     ${dest.zone}
                                 </span>
                             </div>
                         </div>
-
-                        <!-- Progress Section -->
-                        <div class="space-y-3.5 pt-2">
-                            <!-- Economy class -->
-                            ${renderCabinRow(i18n[currentLang].econ, userMiles, econReq, econPct, 'bg-emerald-500')}
-                            <!-- Premium Economy class -->
-                            ${renderCabinRow(i18n[currentLang].pey, userMiles, peyReq, peyPct, 'bg-cyan-500')}
-                            <!-- Business class -->
-                            ${renderCabinRow(i18n[currentLang].biz, userMiles, bizReq, bizPct, 'bg-indigo-500')}
+                        <div class="space-y-3.5 pt-1">
+                            ${renderCabinRow(i18n[currentLang].econ, userMiles, econReq, econPct, 'bg-[#00c2ba]')}
+                            ${renderCabinRow(i18n[currentLang].pey, userMiles, peyReq, peyPct, 'bg-[#009b94]')}
+                            ${renderCabinRow(i18n[currentLang].biz, userMiles, bizReq, bizPct, 'bg-[#e2d5c3]')}
                         </div>
                     </div>
                 `;
             });
         }
 
-        // Set the current focused card
         function selectActiveCard(id) {
             activeCardId = id;
             calculateAll();
         }
 
-        // Render sub-row details of required miles with target values
         function renderCabinRow(label, currentMiles, requiredMiles, percentage, progressColor) {
             const isCompleted = currentMiles >= requiredMiles;
             const badge = isCompleted 
-                ? `<span class="text-[10px] text-emerald-400 font-extrabold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Ready</span>`
+                ? `<span class="text-[10px] text-[#00c2ba] font-extrabold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Ready</span>`
                 : `<span class="text-[10px] text-slate-500">${percentage}%</span>`;
 
             return `
@@ -582,20 +555,18 @@
                         <span class="text-slate-400">${label}</span>
                         <span class="font-semibold text-slate-200 font-mono">${requiredMiles.toLocaleString()} ${badge}</span>
                     </div>
-                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                    <div class="w-full bg-[#112b2a] h-1 rounded-full overflow-hidden">
                         <div class="${progressColor} h-full transition-all duration-500" style="width: ${percentage}%"></div>
                     </div>
                 </div>
             `;
         }
 
-        // Clipboard Share Reporting System
         function shareReport() {
             const activeCard = creditCards.find(c => c.id === activeCardId);
             const amount = parseFloat(document.getElementById('spendAmount').value) || 0;
             const cat = document.getElementById('category').value;
             const catText = i18n[currentLang][`cat${cat.charAt(0).toUpperCase() + cat.slice(1)}`];
-            
             const miles = activeCard.miles || Math.floor(amount / activeCard.rates[cat]);
             const formattedMiles = miles.toLocaleString();
 
